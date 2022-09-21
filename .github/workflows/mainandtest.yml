@@ -28,3 +28,20 @@ on:
           with: 
             name: build 
             path: build
+
+deploy:
+  runs-on: ubuntu-latest 
+  needs: build 
+  environment: 
+    name: production 
+    url: http://< WhateverURLThatIsNotTaken >.surge.sh
+  steps: 
+    - name: Download the Build Artifact 
+      uses: actions/download-artifact@v3.0.0 
+      with: 
+        name: build
+    - name: deploy to surge 
+      run: npx surge –project ‘.’ –domain melted-chickens.surge.sh 
+      env: 
+        SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }} 
+        SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}  
